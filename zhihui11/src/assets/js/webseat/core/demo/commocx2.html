@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>获取座席当前状态</title>
+<script type="text/javascript" src="../webagent.js"></script>
+<script type="text/javascript" src="commocx2.js"></script>
+<script type="text/javascript">
+    function signin()
+    {
+        WebAgent.init(
+        {
+            oid : "101",
+            pwd : "sadfasdf",
+            vcid : "1",
+            type : "10",
+            cfgUrl : "http://xxx.xxx.xx:9080/was/",
+            lang : "zh_CN", // lang: "en",
+            onSucc : function()
+            {
+                info("签入成功！版本号=" + WebAgent.getVersion());
+                onSucc();
+            },
+            onError : function(errCode, errMsg)
+            {
+                error("登录失败,原因【" + errMsg + "】");
+            }
+        });
+    }
+
+    function noop()
+    {
+    }
+
+    function onSucc()
+    {
+        WebAgent.info = info;
+        WebAgent.error = error;
+        WebAgent.debug = noop;
+        WebAgent.trace = noop;
+
+		print("<br>================= Get方法 ===================<br>")
+		
+        createTestBtn(null, function()
+        {
+            info(WebAgent.GetFlowNO());
+
+        }, "GetFlowNO")
+		
+        createTestBtn(null, function()
+        {
+            info("座席当前状态:" + WebAgent.GetAgentStatus());
+
+        }, "GetAgentStatus")
+		
+        createTestBtn(null, function()
+        {
+            info("GetCallingNO:" + WebAgent.GetCallingNO());
+
+        }, "GetCallingNO")
+		
+        createTestBtn(null, function()
+        {
+            info("GetUserData:" + WebAgent.GetUserData());
+
+        }, "GetUserData")
+		
+		print("<br><br>================= 话务相关 ===================<br>")
+		// 外呼
+        createTestBtn(Cmd.MAKE_CALL, function()
+        {
+            var phoneNo = window.prompt("外呼\r\n外呼号码:");
+            if (!phoneNo) return;
+            WebAgent.CallUser(phoneNo);
+
+        }, "CallUser")
+		
+
+        //保持/取消保持
+        createSwitchBtn(Cmd.HOLD, function()
+        {
+            WebAgent.HoldCall();
+
+        }, function()
+        {
+            WebAgent.ReHoldCall();
+        }, "HoldCall", "RetrieveHold")
+        
+        //静音/取消静音
+        createSwitchBtn(Cmd.MUTE, function()
+        {
+            WebAgent.setMute(true);
+
+        }, function()
+        {
+            WebAgent.setMute(false);
+        }, "静音", "取消静音")
+        
+
+        // 外呼
+        createTestBtn(Cmd.MAKE_CALL, function()
+        {
+            var phoneNo = window.prompt("外呼\r\n外呼号码:");
+            if (!phoneNo) return;
+            WebAgent.CallUser(phoneNo);
+
+        }, "CallUser")
+
+        // 扩展外呼
+        createTestBtn(Cmd.MAKE_CALL, function()
+        {
+            var pn = window.prompt("扩展外呼\r\n被叫:");
+            if (!pn) return;
+            var caller = window.prompt("主叫:");
+            WebAgent.ExCallUser(pn, caller);
+
+        }, "ExCallUser")
+
+        //挂机
+        createTestBtn(Cmd.HANG_UP, function()
+        {
+            WebAgent.HangUP();
+
+        }, "HangUP")
+
+        // 挂指定号码
+        createTestBtn(Cmd.HANG_UP, function()
+        {
+            var pn = window.prompt("挂指定号码\r\n需挂断的号码:");
+            if (!pn) return;
+            var isAll = window.prompt("是否挂机掉全部电话, 1表示挂全部, 0只挂指定号码：");
+            WebAgent.HangUpEx(pn, isAll);
+
+        }, "HangUpEx")
+
+        // 挂机到自动业务
+        createTestBtn(Cmd.HANG_UP, function()
+        {
+            var callData = window.prompt("挂机到自动业务\r\n挂机时传递给自动业务的消息内容:");
+            if (!callData) return;
+            WebAgent.ClearCallToAutoServiceEx(callData);
+
+        }, "ClearCallToAutoServiceEx")
+
+        // 咨询到自动业务
+        createTestBtn(Cmd.CONS, function()
+        {
+            var accessCode = window.prompt("咨询到自动业务\r\n业务接入码:");
+            if (!accessCode) return;
+            var data = window.prompt("发送到业务的数据:");
+            WebAgent.Consult2Auto(0, accessCode, data);
+        }, "Consult2Auto")
+        
+
+        // 显示状态变化
+        WebAgent.regEvent("OnStateChanged", function(state)
+        {
+            info("状态变化：" + state.name)
+        })
+
+        // Com2.MsgHandle消息处理
+        WebAgent.MsgHandle(function(msgType, data)
+        {
+            info("COM2 <<< MsgHandle("+[msgType, data]+")");
+        });
+        
+        // Com2.MsgInvoker消息处理
+        WebAgent.MsgInvoker(function(msgType, data)
+        {
+            info("COM2 <<< MsgInvoker("+[msgType, data]+")");
+        });
+    }
+</script>
+</head>
+<body>
+<input type="button" onclick="signin()" value="init" />
+Com2功能测试！！
+<hr />
+<div id="btnDiv"></div>
+<div id="msg"
+	style="width: 90%; height: 300px; overflow: auto; border: 1px solid #CCCCCC">
+</div>
+<input type="button" onclick="clearMsg()" value="clear" />
+<pre>
+Cmd.SHOW_BUSY Cmd.IDLE Cmd.HOLD Cmd.CONS Cmd.SERVICE 
+Cmd.FORCE_BUSY Cmd.FORCE_IDLE Cmd.FORCE_SIGNOUT Cmd.SIGNIN 
+Cmd.MODIFY_PWD Cmd.RE_HOLD Cmd.MUTE Cmd.UNMUTE Cmd.SILENT
+Cmd.TRANSFER Cmd.SSTRANSFER Cmd.MAKE_CALL Cmd.CONF Cmd.SSCONF 
+Cmd.LOGOUT Cmd.INTERCEPT Cmd.LISTEN Cmd.EXIT Cmd.HANG_UP 
+Cmd.RECORD Cmd.STOP_RECORD Cmd.CANCEL_ADJUST Cmd.MANUAL_ADJUEST
+Cmd.WEB_CHAT_ON Cmd.WEB_CHAT_OFF Cmd.PLAY_VIDEO Cmd.PLAY_REC 
+Cmd.PLAY_RECENT_REC Cmd.CAPTURE_SCREEN Cmd.SEND_CAP_SCR Cmd.STOP_SEND_CAP_SCR 
+Cmd.REQ_UNLOCK Cmd.SETTING Cmd.MEDIA Cmd.FAST_CALL Cmd.PLAY_TTS Cmd.NIGHT_RING 
+Cmd.RE_CALL Cmd.QC Cmd.SET_RIGHT_CMD_MAP
+</pre>
+</body>
+</html>

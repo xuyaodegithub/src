@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>注册按钮插件</title>
+<script type="text/javascript" src="../core/webagent.js"></script>
+<script type="text/javascript" src="webagent-regBtn.js"></script>
+<script type="text/javascript" src="../core/test/md5.js"></script>
+<script type="text/javascript">
+    var Cmd = WebAgent.Cmd;
+    function createBtn(btnName, fn)
+    {
+        var btn = document.createElement("input");
+        btn.type = 'button';
+        btn.value = btnName;
+        btn.onclick = fn;
+        document.body.appendChild(btn);
+        return btn;
+    }
+
+    function createUVBtn(btnName, fn)
+    {
+        var btn = createBtn(btnName, fn);
+
+        btn.setEnabled = function(b)
+        {
+            btn.disabled = !b;
+        }
+
+        btn.setVisible = function(b)
+        {
+            btn.style.display = (b) ? "" : "none";
+        }
+
+        return btn;
+    }
+
+    function createInput(btnName, id, defValue)
+    {
+        var span = document.createElement("span");
+        span.innerHTML = btnName;
+
+        var btn = document.createElement("input");
+        btn.type = 'text';
+        btn.value = defValue;
+        btn.id = id;
+        document.body.appendChild(span);
+        document.body.appendChild(btn);
+    }
+
+    function print(msg)
+    {
+        var span = document.createElement("span");
+        span.innerHTML = msg;
+        document.body.appendChild(span);
+    }
+
+    function getVal(id)
+    {
+        return document.getElementById(id).value;
+    }
+
+    function init()
+    {
+        createInput("oid", "oid", "1000")
+        createInput("pwd", "pwd", "1")
+        createInput("vcid", "vcid", "1")
+        createInput("cfgUrl", "cfgUrl", "http://10.130.55.144:8080/was")
+
+        createBtn("签入", function()
+        {
+            WebAgent.signin(
+            {
+                oid : getVal("oid"),
+                pwd : new MD5().hex_md5(getVal("pwd")).toUpperCase(),
+                vcid : getVal("vcid"),
+                type : "10",
+                cfgUrl : getVal("cfgUrl"),
+                lang : "zh_CN", // lang: "en",
+                onSucc : function()
+                {
+                    alert("签入成功！版本号=" + WebAgent.getVersion());
+                },
+                onError : function(errCode, errMsg)
+                {
+                    alert("登录失败,原因【" + errMsg + "】");
+                }
+            });
+        });
+
+        go();
+    }
+
+    function go()
+    {
+        print("<br>")
+        //
+        var callBtn = createUVBtn("外呼", function()
+        {
+        });
+		
+        createInput("needShowBtn", "needShowBtn", "1002")
+       
+        createBtn("获取hold按钮", function()
+        {
+        	var btns = WebAgent.getBtnByCmd(getVal("needShowBtn"));
+        	for(var i=0;i<btns.length;i++)
+        	{
+        		btns[i].setVisible(true);
+        	}
+        });
+
+
+        WebAgent.regSwitchBtn(Cmd.MAKE_CALL, callBtn, 1);
+
+        WebAgent.regSwitchBtn(Cmd.IDLE, createUVBtn("示闲", null), 1);
+        WebAgent.regSwitchBtn(Cmd.SHOW_BUSY, createUVBtn("示忙", null), 1);
+
+        WebAgent.regSwitchBtn(Cmd.MUTE, createUVBtn("静音", null), 1);
+        WebAgent.regSwitchBtn(Cmd.UNMUTE, createUVBtn("取消静音", null), 1);
+
+        WebAgent.regSwitchBtn(Cmd.MANUAL_ADJUST, createUVBtn("整理", null), 1);
+        WebAgent.regSwitchBtn(Cmd.CANCEL_ADJUST, createUVBtn("取消整理", null), 1);
+
+        WebAgent.regSwitchBtn(Cmd.HOLD, createUVBtn("保持1", null), 1);
+        WebAgent.regSwitchBtn(Cmd.RE_HOLD, createUVBtn("取消保持1", null), 1);
+
+        WebAgent.regSwitchBtn(Cmd.HOLD, createUVBtn("保持2", null), 2);
+        WebAgent.regSwitchBtn(Cmd.RE_HOLD, createUVBtn("取消保持2", null), 2);
+
+    }
+</script>
+</head>
+<body onload="init()">
+</body>
+</html>

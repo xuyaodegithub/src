@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>外呼</title>
+<script type="text/javascript" src="../../core/util/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="call.js"></script>
+<style type="text/css">
+body{
+	font-size: 12px;
+	padding: 10px;
+}
+.text{
+	height: 22px;
+	width: 180px;
+	border: 1px solid;
+	border-color: #AEBCCC #CDE1F8 #CDE1F8 #AEBCCC;
+}
+.btn{
+	height: 24px;
+	line-height: 24px;
+	border: 1px solid #AEC9E7;
+	background: url(skins/default/images/btnFill.gif) repeat-x left top;
+}
+</style>
+</head>
+<body>
+	<label>呼叫号码</label>
+	<input id="inputNO" type="text" class="text"/>
+	<input type="button" value="呼叫" class="btn" onclick="clickCall()">
+</body>
+</html>

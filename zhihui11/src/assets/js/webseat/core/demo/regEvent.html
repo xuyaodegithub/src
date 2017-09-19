@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../webagent.js"></script>
+<script type="text/javascript">
+    function signin()
+    {
+        WebAgent.signin(
+        {
+            oid : "101",
+            pwd : "sadfasdf",
+            vcid : "1",
+            type : "10",
+            cfgUrl : "http://xxx.xxx.xx:9080/was/",
+            lang : "zh_CN", // lang: "en",
+            onSucc : function()
+            {
+                alert("签入成功！版本号=" + WebAgent.getVersion());
+                onSucc_();
+            },
+            onError : function(errCode, errMsg)
+            {
+                alert("登录失败,原因【" + errMsg + "】");
+            }
+        });
+    }
+
+
+    // 登录成功后处理函数
+    function onSucc_()
+    {
+        //定义示忙按钮
+        var showBusyBtn = document.getElementById("showBusyBtn");
+        showBusyBtn.disable = function()
+        {
+            this.disabled = true;
+        }
+        showBusyBtn.enable = function()
+        {
+            this.disabled = false;
+        }
+
+        //定义示闲按钮
+        var idleBtn = document.getElementById("idleBtn");
+        idleBtn.disable = function()
+        {
+            this.disabled = true;
+        }
+        idleBtn.enable = function()
+        {
+            this.disabled = false;
+        }
+
+  
+        //注册按钮
+        WebAgent.regBtn(Cmd.SHOW_BUSY, showBusyBtn);
+        WebAgent.regBtn(Cmd.IDLE, idleBtn);
+
+        //注册“状态切换”事件
+        WebAgent.regEvent("OnStateChanged", function(state)
+        {
+            var str = "当前状态：" + state.name +"<br>状态码： "+state.stateCode+"<br>可用的A接口方法："+state.enableAinfMethod;
+            document.getElementById("msg").innerHTML = str;
+            document.title = str
+        })
+    }
+
+    function showBusy()
+    {
+        WebAgent.setBusy();
+    }
+
+    function idle()
+    {
+        WebAgent.idle();
+    }
+
+
+</script>
+</head>
+<body>
+演示注册事件（监听状态发生改变的事件）
+<input type="button" onclick="signin()" value="login" />
+<br>
+<br>
+<input type="button" id="showBusyBtn" onclick="showBusy()" value="示忙" />
+<input type="button" id="idleBtn" onclick="idle()" value="示闲" />
+
+<div id="msg"></div>
+<div id="msg2"></div>
+</body>
+</html>

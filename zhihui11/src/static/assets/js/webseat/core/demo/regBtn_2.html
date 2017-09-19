@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>注册按钮</title>
+<script type="text/javascript" src="../webagent.js"></script>
+<script type="text/javascript">
+	
+	
+	
+    function signin()
+    {
+        WebAgent.signin(
+        {
+            oid : "101",
+            pwd : "sadfasdf",
+            vcid : "1",
+            type : "10",
+            cfgUrl : "http://xxx.xxx.xx:9080/was/",
+            lang : "en", // lang: "en",
+            onSucc : function()
+            {
+                alert("签入成功！版本号=" + WebAgent.getVersion());
+                onSucc_();
+            },
+            onError : function(errCode, errMsg)
+            {
+                alert("登录失败,原因【" + errMsg + "】");
+            }
+        });
+    }
+
+    // 登录成功后处理函数
+    function onSucc_()
+    {
+        //定义切换按钮
+        var switchBtn = document.getElementById("switchBtn");
+        switchBtn.cmd = Cmd.SHOW_BUSY;
+        switchBtn.disable = function()
+        {
+            this.disabled = true;
+        }
+        switchBtn.enable = function()
+        {
+            this.disabled = false;
+        }
+        switchBtn.switchTo = function(cmd)
+        {
+            this.cmd = cmd;
+            if (cmd == Cmd.SHOW_BUSY)
+            {
+                this.value = "×示忙"
+            }
+            else
+            {
+                this.value = "√示闲"
+            }
+        }
+
+        //注册按钮
+        WebAgent.regBtn(Cmd.SHOW_BUSY, switchBtn);
+    }
+
+    function busyOrIdle(obj)
+    {
+        if (obj.cmd == Cmd.IDLE)
+        {
+           WebAgent.idle();
+        }
+        else
+        {
+             WebAgent.setBusy();
+        }
+    }
+
+</script>
+</head>
+<body>
+演示自动管理按钮状态
+<br>
+<br>
+<input type="button" onclick="signin()" value="login" />
+<br>
+<input type="button" id="switchBtn" onclick="busyOrIdle(this)"
+	value="×示忙" />
+<div id="msg"></div>
+<div id="msg2"></div>
+</body>
+</html>

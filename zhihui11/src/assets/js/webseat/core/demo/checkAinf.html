@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>业务模块初始化</title>
+<script type="text/javascript" src="../webagent.js"></script>
+<script type="text/javascript">
+    function createTestBtn(btnName, fn)
+    {
+
+        var btn = document.createElement("input");
+        btn.type = 'button';
+        btn.value = btnName;
+        btn.onclick = fn;
+
+        var btnDiv = document.getElementById("btnDiv");
+        btnDiv.appendChild(btn);
+    }
+
+    function init()
+    {
+        createTestBtn("checkAInfExist", function()
+        {
+            WebAgent.checkAInfExist(function(isExist)
+            {
+                alert("Ainf" + ((!isExist) ? "不" : "") + "存在")
+            });
+        })
+
+        createTestBtn("getAllVesrions", function()
+        {
+            WebAgent.getAllVesrions(function(ver)
+            {
+                alert(ver)
+            });
+        })
+
+        createTestBtn("getModuleNo", function()
+        {
+            WebAgent.getModuleNo(function(ver)
+            {
+                alert(ver)
+            });
+        })
+
+        createTestBtn("getAgentPhone", function()
+        {
+            WebAgent.getAgentPhone(function(ver)
+            {
+                alert(ver)
+            });
+        })
+
+        createTestBtn("getMacAddr", function()
+        {
+            WebAgent.getMacAddr(function(ver)
+            {
+                alert(ver)
+            });
+        })
+
+        createTestBtn("checkAInfUpdate", function()
+        {
+            WebAgent.checkAInfUpdate(function(ver)
+            {
+                alert((ver && ($.trim(ver) != "")) ? "可以升级," + ver : "不需要升级")
+            });
+        })
+
+        createTestBtn("updateAInfo", function()
+        {
+            WebAgent.updateAInfo(function(ver)
+            {
+                alert(ver)
+            });
+        })
+
+    }
+</script>
+</head>
+<body onload="init()">
+<div id="btnDiv"></div>
+</body>
+</html>

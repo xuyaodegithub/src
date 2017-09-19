@@ -1,0 +1,125 @@
+@charset "utf-8";
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+ol, ul {
+    list-style: none;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+img {
+    border: none;
+}
+
+.floatLeft{
+	float: left;
+}
+.floatRight{
+	float: right;
+}
+.clearFloat{
+	clear: both;
+}
+.iconMenu{
+	padding: 5px 0 0 8px;
+}
+.iconMenu li{
+	float: left;
+	width: 54px;
+	height: 76px;
+	margin-left: 13px;
+	text-align: center;
+	position: relative;
+}
+.iconMenu li a{
+	display: block;
+	width: 54px;
+	height: 76px;
+}
+.iconMenu li span{
+	position: absolute;
+	bottom: 1px;
+	left: 0;
+	display: inline-block;
+	width: 54px;
+	font-family: Microsoft YaHei;
+}
+.iconMenu li.disabled a{
+	cursor: default;
+}
+.iconMenu li.disabled span{
+	color: #666;
+}
+.iconMenu li.login{
+	background: url(images/iconLogin.png) no-repeat left top;
+}
+.iconMenu li.login.disabled{
+	background: url(images/iconLoginDis.png) no-repeat left top;
+}
+
+.iconMenu li.logout{
+	background: url(images/iconLogout.png) no-repeat left top;
+}
+.iconMenu li.logout.disabled{
+	background: url(images/iconLogoutDis.png) no-repeat left top;
+}
+
+.iconMenu li.busy{
+	background: url(images/iconBusy.png) no-repeat left top;
+}
+.iconMenu li.busy.disabled{
+	background: url(images/iconBusyDis.png) no-repeat left top;
+}
+
+.iconMenu li.idle{
+	background: url(images/iconIdle.png) no-repeat left top;
+}
+.iconMenu li.idle.disabled{
+	background: url(images/iconIdleDis.png) no-repeat left top;
+}
+
+.iconMenu li.holdOn{
+	background: url(images/iconHoldOn.png) no-repeat left top;
+}
+.iconMenu li.holdOn.disabled{
+	background: url(images/iconHoldOnDis.png) no-repeat left top;
+}
+
+.iconMenu li.reply{
+	background: url(images/iconReply.png) no-repeat left top;
+}
+.iconMenu li.reply.disabled{
+	background: url(images/iconReplyDis.png) no-repeat left top;
+}
+
+.iconMenu li.call{
+	background: url(images/iconCall.png) no-repeat left top;
+}
+.iconMenu li.call.disabled{
+	background: url(images/iconCallDis.png) no-repeat left top;
+}
+
+.iconMenu li.hook{
+	background: url(images/iconHook.png) no-repeat left top;
+}
+.iconMenu li.hook.disabled{
+	background: url(images/iconHookDis.png) no-repeat left top;
+}
+
+.iconMenu li.service{
+	background: url(images/iconService.png) no-repeat left top;
+}
+.iconMenu li.service.disabled{
+	background: url(images/iconServiceDis.png) no-repeat left top;
+}

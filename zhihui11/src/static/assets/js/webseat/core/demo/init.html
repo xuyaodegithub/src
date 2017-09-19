@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>业务模块初始化</title>
+<script type="text/javascript" src="../webagent.js"></script>
+<script type="text/javascript">
+    function init()
+    {
+        WebAgent.init(
+        {
+            onSucc : function(isReady)
+            {
+                alert("初始化成功!   " + ((isReady) ? "已经" : "未") + "登录！");
+            },
+            onError : function(errCode, errMsg)
+            {
+                alert("初始化失败！" + errMsg);
+            },
+            lang : "en"
+        });
+    }
+</script>
+</head>
+<body>
+
+<input type="button"  onclick="init()" value="业务模块初始化" />
+</body>
+</html>
